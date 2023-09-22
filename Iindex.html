@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>image serach App</title>
+    <!-- <link rel="stylesheet" href="imagesearch.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color:orange;
+    font-family: 'Times New Roman', Times, serif;
+}
+#serach-box{
+text-align: center;
+
+
+}
+
+#serach-box input{
+    font-size:20px;
+     margin-top: 10px;
+     padding: 10px;
+     width:60%;
+     border-radius: 14px; 
+     border:2px solid tan ;
+     
+}
+#serach-box i{
+position: relative;
+right:50px;
+color:orange;
+font-size: 18px;
+
+}
+#p1{
+    margin: 20px;
+    font-size:20px;
+    font-weight: 900;
+    color:aqua;
+}
+#section-id{
+    height:100%;
+    width:100%;
+}
+ 
+
+/* fetching image ralative to Design */
+/* .Divbox img{
+    height:200px;
+    width:200px;
+    background-size: cover;
+    display: block;
+    display: flex;
+    /* display: inline;
+    display: flex;
+    justify-content: center;
+    align-items: center; */
+
+
+.image-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+   
+    flex-wrap: wrap;
+    
+}
+.image-container img{
+    height:300px;
+    width:300px;
+}
+
+.image-container .ImageDiv{
+    position: relative;
+}
+.image-container .overlay{
+    position: absolute;
+    bottom: 0;
+    height:0; 
+    width:100%;
+    background-color:rgba(0,0,0,0.7);
+    transition: all 0.3s ease;
+    
+}
+.image-container .ImageDiv:hover .overlay{
+    height: 100%;
+}
+.image-text{
+    color:#fff;
+    text-align: center;
+    display: none;
+    font-size: 20px;
+
+
+
+
+}
+.ImageDiv:hover .overlay{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ImageDiv:hover .overlay .image-text{
+    
+    display: block;
+
+
+} 
+.loadmorebtn{
+    color:#FFF;
+    border:none;
+    padding: 10px;
+    text-align:center;
+    font-size: 15px;
+    border-radius: 5px;
+    margin-left: 600px;
+    font-weight:900;
+    background-color: greenyellow;
+    display: none;
+}
+
+/* btn responisve */
+@media screen and (max-width:900px){
+    .loadmorebtn{
+        margin-left: 400px;
+    }
+
+}
+    
+@media screen and (max-width:415px){
+    .loadmorebtn{
+        margin-left: 150px
+    }
+    
+    
+
+    
+}
+
+    </style>
+</head>
+<body>
+ <header>
+   <div id="serach-box">
+    <form action="" id="submitfunction">
+    <h2>Image Search</h2>
+    <input type="text" placeholder="Search the image" id="input-box">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <p id="p1"></p>
+  </form>
+   </div>
+ </header>
+ 
+ <main>
+<div class="image-container">
+
+</div>
+<button class="loadmorebtn">Load More</button>
+ </main> 
+  
+
+
+
+
+
+ <script>
+  const summitfunction = document.querySelector("#submitfunction");
+const inputBox = document.getElementById("input-box");
+const accesskey='kbypvbLWMx5VxGaEJmMf2qcSfAQuI48Rgurw8MXykf8';
+const Imageconatiner =document.querySelector(".image-container");
+const loadmorebtn = document.querySelector(".loadmorebtn");
+var page;
+
+
+
+
+
+
+const fetchDataimage =async (query,pageNo) =>{
+    if(pageNo===1){
+        console.log("Hello");
+        Imageconatiner.innerHTML = '';
+        document.getElementById("p1").innerText = "";
+        
+        
+    }
+    
+    try{
+        const url =`https://api.unsplash.com/search/photos/?query=${query}&per_page=28&page=${pageNo}&client_id=${accesskey}`;
+        const response = await fetch(url);
+        
+        const data = await response.json();
+         
+        data.results.forEach(photos=>{
+            console.log(photos);
+            const ImageBox = document.createElement("div");
+            ImageBox.classList.add("ImageDiv");
+            ImageBox.innerHTML =`<img src="${photos.urls.regular}"/>`;
+           
+            
+           const ovarlayElemenst = document.createElement("div");
+           ovarlayElemenst.classList.add("overlay")
+           console.log(ovarlayElemenst);
+
+ const overlayText = document.createElement("h3");
+ overlayText.classList.add("image-text");
+ overlayText.innerText = `${photos.alt_description}`;
+ 
+
+
+
+ ovarlayElemenst.appendChild(overlayText)
+           ImageBox.appendChild(ovarlayElemenst)
+            Imageconatiner.appendChild(ImageBox);
+
+            
+            
+             
+        });
+        if(data.total_pages===pageNo){
+            loadmorebtn.style.display = "none"
+
+        }else{
+            loadmorebtn.style.display = "block"
+        }
+         
+        if(inputBox.value===photos.id){
+            console.log("Hello World");
+        }else{
+            console.log("Hello World");
+        //     loadmorebtn.style.display ="none";
+        //     loadmorebtn.style.color ="red";
+         }
+
+    
+
+
+     
+        
+
+
+
+
+
+
+
+
+
+    }catch(error){
+        console.log("Somthing is Wrong");
+    } 
+}
+    summitfunction.addEventListener("submit",(e)=>{
+        e.preventDefault();
+        if(inputBox.value===''){
+            loadmorebtn.style.display ="none";
+            document.getElementById("p1").innerText = "Please Search somethings";
+        }else{
+             page =1;
+            const imputbox =inputBox.value.trim();
+            fetchDataimage(imputbox,page);
+        
+        }
+        });
+
+        // btn func
+
+loadmorebtn.addEventListener("click",()=>{
+
+    fetchDataimage(inputBox.value.trim(),++page);
+});
+
+
+
+
+
+ </script>
+</body>
+</html>
